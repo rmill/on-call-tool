@@ -1,0 +1,18 @@
+{
+  "name": "on-call-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "generate-documents.js",
+  "scripts": {
+    "start": "node generate-documents.js",
+    "clean": "rm -rf ./output/*.csv"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "csv-writer": "^1.6.0",
+    "fs": "0.0.1-security",
+    "moment": "^2.27.0",
+    "node-fetch": "^2.6.0"
+  }
+}
