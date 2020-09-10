@@ -143,6 +143,7 @@ function process_incidents (incidents) {
             end_date.format("HH:mm:ss"),
             (get_incident_duration(incident['created_at'], incident['last_status_change_at']) / 60).toFixed(2),
             null, null, null, null, null, // now unused
+            incident['service']['summary'],
             incident['title'],
             incident['html_url']
         ];
