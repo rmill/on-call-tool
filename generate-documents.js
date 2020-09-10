@@ -127,13 +127,19 @@ function process_incidents (incidents) {
          *
          * 'person', 'date begin', 'date end', 'reason', 'hours earned', 'date reconciled', 'start time',
          * 'time end', 'duration', 'accrual coeff', 'adjusted hours earned', 'outside work hours', 'late night',
-         * 'category', 'callout trigger', 'notes'
+         * 'service', 'category', 'callout trigger', 'notes'
          */
         const start_date = moment(incident['created_at']);
         const end_date = moment(incident['last_status_change_at']);
+        let resolver = incident['last_status_change_by']['summary']
+
+        // Check if the incident is auto-resolved
+        if (resolver === incident['service']['summary']) {
+            resolver = 'Auto-resolved';
+        }
 
         const processed_incident = [
-            incident['last_status_change_by']['summary'],
+            resolver,
             start_date.format("YYYY-MM-DD"),
             end_date.format("YYYY-MM-DD"),
             get_incident_urgency(incident['urgency']),
