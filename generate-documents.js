@@ -114,21 +114,24 @@ async function get_incident_page (api_key, since, offset, limit) {
 }
 
 /**
- * Transform PagerDuty Incidents into the on-call spreadsheet format
+ * Transform PagerDuty Incidents into the on-call spreadsheet format. The returned fields are:
+ *
+ * 'person', 'date begin', 'date end', 'reason', 'hours earned', 'date reconciled', 'start time',
+ * 'time end', 'duration', 'accrual coeff', 'adjusted hours earned', 'outside work hours', 'late night',
+ * 'service', 'category', 'callout trigger', 'notes'
+ *
  * @param {[]} incidents Array of PagerDuty Incidents
- * @returns {[]}
+ * @returns {[]} Array of processed Incidents
  */
 function process_incidents (incidents) {
     const processed_incidents = [];
 
     incidents.forEach(incident => {
-        /**
-         * These are the processed fields
-         *
-         * 'person', 'date begin', 'date end', 'reason', 'hours earned', 'date reconciled', 'start time',
-         * 'time end', 'duration', 'accrual coeff', 'adjusted hours earned', 'outside work hours', 'late night',
-         * 'service', 'category', 'callout trigger', 'notes'
-         */
+        if (incident['resolve_reason'] !== null && incident['resolve_reason']['type'] === 'merge_resolve_reason') {
+            // This indicates that this incident was merged with another and should not be processed
+            return;
+        }
+
         const start_date = moment(incident['created_at']);
         const end_date = moment(incident['last_status_change_at']);
         let resolver = incident['last_status_change_by']['summary']
