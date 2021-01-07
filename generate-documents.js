@@ -101,7 +101,7 @@ async function get_incidents (api_key, start_date) {
  */
 async function get_incident_page (api_key, since, offset, limit) {
     const response = await fetch(
-        `${PAGER_DUTY_API_URL}/incidents?since=${since}&offset=${offset}&limit=${limit}&time_zone=MST&sort_by=created_at:desc`,
+        `${PAGER_DUTY_API_URL}/incidents?since=${since}&offset=${offset}&limit=${limit}&time_zone=MST&sort_by=created_at:asc`,
         {
             headers: {
                 accept: 'application/vnd.pagerduty+json;version=2',
@@ -151,7 +151,7 @@ function process_incidents (incidents) {
             start_date.format("HH:mm:ss"),
             end_date.format("HH:mm:ss"),
             (get_incident_duration(incident['created_at'], incident['last_status_change_at']) / 60).toFixed(2),
-            null, null, null, null, null, // now unused
+            null, // category
             incident['service']['summary'],
             incident['title'],
             incident['html_url']
@@ -218,7 +218,7 @@ function get_incident_duration (start_date, end_date) {
 
 /**
  * Create CSV from the given Incidents
- * @param [] incidents Array of incidents
+ * @param {[]} incidents Array of incidents
  * @returns {Promise<void>}
  */
 async function create_csv(incidents) {
@@ -232,7 +232,7 @@ async function create_csv(incidents) {
 
 /**
  * Log a message
- * @param string message The message to log
+ * @param {string} message The message to log
  */
 function log(message) {
     console.log(`${CONSOLE_MAGENTA}${message}${CONSOLE_CLEAR}`);
