@@ -127,6 +127,11 @@ function process_incidents (incidents) {
     const processed_incidents = [];
 
     incidents.forEach(incident => {
+        // We need all incidents to be resolved or they could be missed on the next run
+        if (incident['status'] !== 'resolved') {
+            throw `Some incidents not resolved: ${JSON.stringify(incident)}`;
+        }
+
         if (incident['resolve_reason'] !== null && incident['resolve_reason']['type'] === 'merge_resolve_reason') {
             // This indicates that this incident was merged with another and should not be processed
             return;
