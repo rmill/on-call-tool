@@ -151,7 +151,7 @@ function process_incidents (incidents) {
             start_date.format("YYYY-MM-DD"),
             end_date.format("YYYY-MM-DD"),
             get_incident_urgency(incident['urgency']),
-            get_hours_earned(incident['created_at'], incident['last_status_change_at'], incident['urgency']),
+            null, // hours acrued
             null, // date reconciled
             start_date.format("HH:mm:ss"),
             end_date.format("HH:mm:ss"),
